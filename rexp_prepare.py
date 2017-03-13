@@ -2,6 +2,7 @@
 
 import sys, os
 from subprocess import call
+from random import randint
 
 print "\nUsage: rexp_prepare.py NumberOfPairedReads File_1.fastq File_2.fastq MinQual MinLen [PREFIX]\n"
 
@@ -58,9 +59,11 @@ print rrr1
 trimmomatic = "trimmomatic PE -phred33 %s %s %s %s %s %s ILLUMINACLIP:/usr/local/lib/Trimmomatic-0.32/adapters/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:%s MINLEN:%s" % (r1, r2, rr1+"_paired.fastq", rr1+"_unpaired.fastq", rr2+"_paired.fastq", rr2+"_unpaired.fastq", mq, ml)
 
 #random selection of reads
+random_seed=randint(1,1000000)
 
-fastq_pe_random_1 = "seqtk sample -s 100 %s %s > %s" % (rr1+"_paired.fastq",sel_reads,rr1+"_paired.fastq.subset")
-fastq_pe_random_2 = "seqtk sample -s 100 %s %s > %s" % (rr2+"_paired.fastq",sel_reads,rr2+"_paired.fastq.subset")
+
+fastq_pe_random_1 = "seqtk sample -s %s %s %s > %s" % (random_seed,rr1+"_paired.fastq",sel_reads,rr1+"_paired.fastq.subset")
+fastq_pe_random_2 = "seqtk sample -s %s %s %s > %s" % (random_seed,rr2+"_paired.fastq",sel_reads,rr2+"_paired.fastq.subset")
 
 #fastq_pe_random = "fastq-pe-random.py %s %s %s" % (rr1+"_paired"+suffix, rr2+"_paired"+suffix, sel_reads)
 
